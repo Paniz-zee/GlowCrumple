@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private Vector2 movement;
     private SpriteRenderer spriteRenderer;
+    private bool nearCookingStation = false;
+    public GameObject craftingUI;
 
     void Start()
     {
@@ -17,34 +19,69 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Get input
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        // Set animation states
-        if (movement.magnitude > 0)
+        if (movement.x != 0)
         {
             animator.SetBool("isWalking", true);
+            spriteRenderer.flipX = (movement.x > 0) ? true : false;
         }
         else
         {
             animator.SetBool("isWalking", false);
         }
 
-        // Flip character based on movement direction
-        if (movement.x < 0)
+        // Handle directional animations
+        if (movement.y < 0)
         {
-            spriteRenderer.flipX = false;
+            animator.SetBool("isMovingUp", true);
+            animator.SetBool("isMovingDown", false);
         }
-        else if (movement.x > 0)
+        else if (movement.y > 0)
         {
-            spriteRenderer.flipX = true;
+            animator.SetBool("isMovingUp", false);
+            animator.SetBool("isMovingDown", true);
+        }
+        else
+        {
+            animator.SetBool("isMovingUp", false);
+            animator.SetBool("isMovingDown", false);
+        }
+        
+
+        if (nearCookingStation && Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleCraftingUI();
+            Debug.Log("CRAFTING");
         }
     }
 
     void FixedUpdate()
     {
-        // Apply movement
         rb.velocity = movement.normalized * moveSpeed;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.name == "CookingStation") // Check GameObject name
+        {
+            nearCookingStation = true;
+            Debug.Log("CLOSE CRAFTING");
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.name == "CookingStation") // Check GameObject name
+        {
+            nearCookingStation = false;
+            craftingUI.SetActive(false); // Close UI when leaving the station
+        }
+    }
+
+    void ToggleCraftingUI()
+    {
+        craftingUI.SetActive(!craftingUI.activeSelf);
     }
 }
