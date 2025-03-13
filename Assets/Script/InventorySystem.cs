@@ -1,31 +1,43 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
-    public static InventorySystem Instance;
-    public List<string> ingredients = new List<string>();
+    public GameObject inventorySlotPrefab;
+    public Transform inventoryGrid;
+    public List<string> inventoryItems = new List<string>();
 
-    void Awake()
+    public void AddItem(string itemName)
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+        inventoryItems.Add(itemName);
+        UpdateInventoryUI();
     }
 
-    public void AddIngredient(string ingredient)
+    void UpdateInventoryUI()
     {
-        ingredients.Add(ingredient);
-        Debug.Log(ingredient + " added to inventory.");
-    }
+        foreach (Transform child in inventoryGrid)
+            Destroy(child.gameObject);
 
-    public void RemoveIngredient(string ingredient)
-    {
-        if (ingredients.Contains(ingredient))
+        foreach (string item in inventoryItems)
         {
-            ingredients.Remove(ingredient);
-            Debug.Log(ingredient + " removed from inventory.");
+            GameObject slot = Instantiate(inventorySlotPrefab, inventoryGrid);
+            Image itemImage = slot.GetComponentInChildren<Image>();
+            // Set sprite dynamically based on item name or reference
+            itemImage.sprite = GetItemSprite(item);
+            slot.GetComponent<Button>().onClick.AddListener(() => DragItemToCookingArea(item));
         }
+    }
+
+    Sprite GetItemSprite(string itemName)
+    {
+        // Retrieve sprite based on item name (add sprites to Resources folder or an enum-based switch)
+        // For example, return Resources.Load<Sprite>($"Sprites/{itemName}");
+        return null;
+    }
+
+    void DragItemToCookingArea(string itemName)
+    {
+        FindObjectOfType<CookingStation>().AddIngredient(itemName);
     }
 }
