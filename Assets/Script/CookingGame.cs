@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI; // Import this for the Button component
 using System.Collections; // Add this to use IEnumerator and coroutines
+using TMPro;
 
 public class CookingGame : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class CookingGame : MonoBehaviour
     public GameObject spoon;  // Reference to the spoon (which is now a button)
     private bool ingredient1Added = false;
     private bool ingredient2Added = false;
+    public TMP_Text messageText;
 
     // The speed of the spoon movement
     public float moveSpeed = 5f;
@@ -15,41 +17,70 @@ public class CookingGame : MonoBehaviour
     // This function will be called when the spoon (acting as the button) is clicked
     public void MixIngredients()
     {
-        if (ingredient1Added && ingredient2Added)
-        {
-            Debug.Log("Mixing ingredients!");
-            StartCoroutine(MoveSpoonToBowl());
-        }
-        else
-        {
-            Debug.Log("Add ingredients before mixing!");
-        }
+        Debug.Log("Mixing ingredients!");
+        StartCoroutine(MoveSpoonToBowl());
     }
+
 
     private IEnumerator MoveSpoonToBowl()
     {
-        Vector3 originalPosition = spoon.transform.position;
-        Vector3 targetPosition = bowl.transform.position; // Move towards the bowl
+        Vector3 center = bowl.transform.position; // Center of mixing
+        float radius = 0.5f; // Adjust based on the desired mixing range
+        float speed = 2f; // Adjust for how fast the spoon moves
+        float duration = 2f; // How long the mixing should last
+        float elapsedTime = 0f;
 
-        float journeyLength = Vector3.Distance(originalPosition, targetPosition);
-        float startTime = Time.time;
-
-        while (Vector3.Distance(spoon.transform.position, targetPosition) > 0.1f)
+        while (elapsedTime < duration)
         {
-            float distanceCovered = (Time.time - startTime) * moveSpeed;
-            float fractionOfJourney = distanceCovered / journeyLength;
+            float angle = elapsedTime * speed * Mathf.PI * 2; // Full circular motion
+            float x = center.x + Mathf.Cos(angle) * radius;
+            float y = center.y + Mathf.Sin(angle) * radius;
 
-            spoon.transform.position = Vector3.Lerp(originalPosition, targetPosition, fractionOfJourney);
+            spoon.transform.position = new Vector3(x, y, spoon.transform.position.z);
 
-            // Debugging line to see the progress of the movement
-            Debug.Log($"Moving Spoon: {fractionOfJourney * 100}%");
-
-            yield return null; // Wait until the next frame
+            elapsedTime += Time.deltaTime;
+            yield return null;
+            messageText.text = "Mixing ingredients!";
         }
 
-        Debug.Log("Spoon reached the bowl!");
-        // You can optionally call another coroutine to return the spoon to the original position if needed.
+        Debug.Log("Mixing completed!");
     }
+    //private IEnumerator MoveSpoonToBowl()
+    //{
+    //    Vector3 center = bowl.transform.position; // Center of mixing
+    //    Vector3 originalBowlPosition = bowl.transform.position; // Store original bowl position
+    //    float radius = 0.5f; // Adjust based on the desired mixing range
+    //    float speed = 2f; // Adjust for how fast the spoon moves
+    //    float duration = 2f; // How long the mixing should last
+    //    float shakeIntensity = 0.10f; // Bowl shaking intensity
+    //    float elapsedTime = 0f;
+
+    //    while (elapsedTime < duration)
+    //    {
+    //        // Circular motion for spoon
+    //        float angle = elapsedTime * speed * Mathf.PI * 2; // Full circular motion
+    //        float x = center.x + Mathf.Cos(angle) * radius;
+    //        float y = center.y + Mathf.Sin(angle) * radius;
+
+    //        spoon.transform.position = new Vector3(x, y, spoon.transform.position.z);
+
+    //        // Shake the bowl slightly
+    //        bowl.transform.position = originalBowlPosition + new Vector3(
+    //            Random.Range(-shakeIntensity, shakeIntensity),
+    //            Random.Range(-shakeIntensity, shakeIntensity),
+    //            0f
+    //        );
+
+    //        elapsedTime += Time.deltaTime;
+    //        yield return null;
+    //    }
+
+    //    // Reset bowl position after shaking
+    //    bowl.transform.position = originalBowlPosition;
+    //    Debug.Log("Mixing completed!");
+    //}
+
+
 
     // Optionally, move the spoon back to its original position after mixing
     private IEnumerator MoveSpoonBack(Vector3 originalPosition)
