@@ -22,14 +22,19 @@ public class CookingGame : MonoBehaviour
     }
 
 
+    private Vector3 initialSpoonPosition; // To store the initial position of the spoon
+
     private IEnumerator MoveSpoonToBowl()
     {
+        initialSpoonPosition = spoon.transform.position; // Store the initial position of the spoon
+
         Vector3 center = bowl.transform.position; // Center of mixing
         float radius = 0.5f; // Adjust based on the desired mixing range
         float speed = 2f; // Adjust for how fast the spoon moves
         float duration = 2f; // How long the mixing should last
         float elapsedTime = 0f;
 
+        // Mixing animation
         while (elapsedTime < duration)
         {
             float angle = elapsedTime * speed * Mathf.PI * 2; // Full circular motion
@@ -44,7 +49,24 @@ public class CookingGame : MonoBehaviour
         }
 
         Debug.Log("Mixing completed!");
+
+        // Move the spoon back to its initial position after mixing
+        float returnSpeed = 2f; // Adjust the return speed
+        float returnDuration = 1f; // Adjust how fast the spoon returns
+
+        elapsedTime = 0f;
+        while (elapsedTime < returnDuration)
+        {
+            spoon.transform.position = Vector3.Lerp(spoon.transform.position, initialSpoonPosition, elapsedTime / returnDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure the spoon is exactly at the initial position at the end
+        spoon.transform.position = initialSpoonPosition;
+        messageText.text = "Ready to bake!";
     }
+
     //private IEnumerator MoveSpoonToBowl()
     //{
     //    Vector3 center = bowl.transform.position; // Center of mixing
@@ -82,21 +104,6 @@ public class CookingGame : MonoBehaviour
 
 
 
-    // Optionally, move the spoon back to its original position after mixing
-    private IEnumerator MoveSpoonBack(Vector3 originalPosition)
-    {
-        Vector3 currentPosition = spoon.transform.position;
 
-        float journeyLength = Vector3.Distance(currentPosition, originalPosition);
-        float startTime = Time.time;
-
-        while (Vector3.Distance(spoon.transform.position, originalPosition) > 0.1f)
-        {
-            float distanceCovered = (Time.time - startTime) * moveSpeed;
-            float fractionOfJourney = distanceCovered / journeyLength;
-
-            spoon.transform.position = Vector3.Lerp(currentPosition, originalPosition, fractionOfJourney);
-            yield return null; // Wait until the next frame
-        }
-    }
+   
 }
