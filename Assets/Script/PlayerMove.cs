@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -52,8 +53,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (nearCookingStation && Input.GetKeyDown(KeyCode.E))
         {
-            ToggleCraftingUI();
+            //ToggleCraftingUI();
             Debug.Log("CRAFTING");
+            SceneManager.LoadScene("PlayScene");
         }
     }
 
@@ -76,12 +78,20 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.name == "CookingStation") // Check GameObject name
         {
             nearCookingStation = false;
-            craftingUI.SetActive(false); // Close UI when leaving the station
+            /*craftingUI.SetActive(false);*/ // Close UI when leaving the station
         }
     }
 
-    void ToggleCraftingUI()
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        craftingUI.SetActive(!craftingUI.activeSelf);
+        if (collision.gameObject.name == "Exit") // Ensure only the player triggers it
+        {
+            SceneManager.LoadScene("Map");
+        }
     }
+
+    //void ToggleCraftingUI()
+    //{
+    //    craftingUI.SetActive(!craftingUI.activeSelf);
+    //}
 }
