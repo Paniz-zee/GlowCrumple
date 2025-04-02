@@ -5,7 +5,7 @@ public class MusicManager : MonoBehaviour
 {
     public static MusicManager instance;
 
-   private AudioSource audioSource;
+   public AudioSource audioSource;
     public AudioClip startSceneMusic;
     public AudioClip gameSceneMusic; // This will also play in PlayScene
 
