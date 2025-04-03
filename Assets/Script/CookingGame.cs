@@ -72,41 +72,7 @@ public class CookingGame : MonoBehaviour
 
     }
 
-    //private IEnumerator MoveSpoonToBowl()
-    //{
-    //    Vector3 center = bowl.transform.position; // Center of mixing
-    //    Vector3 originalBowlPosition = bowl.transform.position; // Store original bowl position
-    //    float radius = 0.5f; // Adjust based on the desired mixing range
-    //    float speed = 2f; // Adjust for how fast the spoon moves
-    //    float duration = 2f; // How long the mixing should last
-    //    float shakeIntensity = 0.10f; // Bowl shaking intensity
-    //    float elapsedTime = 0f;
-
-    //    while (elapsedTime < duration)
-    //    {
-    //        // Circular motion for spoon
-    //        float angle = elapsedTime * speed * Mathf.PI * 2; // Full circular motion
-    //        float x = center.x + Mathf.Cos(angle) * radius;
-    //        float y = center.y + Mathf.Sin(angle) * radius;
-
-    //        spoon.transform.position = new Vector3(x, y, spoon.transform.position.z);
-
-    //        // Shake the bowl slightly
-    //        bowl.transform.position = originalBowlPosition + new Vector3(
-    //            Random.Range(-shakeIntensity, shakeIntensity),
-    //            Random.Range(-shakeIntensity, shakeIntensity),
-    //            0f
-    //        );
-
-    //        elapsedTime += Time.deltaTime;
-    //        yield return null;
-    //    }
-
-    //    // Reset bowl position after shaking
-    //    bowl.transform.position = originalBowlPosition;
-    //    Debug.Log("Mixing completed!");
-    //}
-
+    
 
 
 
