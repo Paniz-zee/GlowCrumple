@@ -29,7 +29,7 @@ public class BowlMovement : MonoBehaviour
     {
         isMoving = true;
         // Stop the bowl after 5 seconds
-        Invoke("StopBowl", 5f);
+        Invoke("StopBowl", 3f);
         messageText.text = "Baking in progress!";
         StartCoroutine(StopBowlAndSpawnBread());
     }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ca28d8aa0b0cb1f459a1b71ba32555c2
+guid: eb3e248559cf36446ad28a03937c6931
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2626192435373389952
-    second: flourr_0
+      213: -5177107971769226052
+    second: 8559327_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: flourr_0
+      name: 8559327_0
       rect:
         serializedVersion: 2
-        x: 34
-        y: 10
-        width: 928
-        height: 952
+        x: 0
+        y: 0
+        width: 2000
+        height: 1161
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -127,8 +127,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 08740c9e4e3ed8bd0800000000000000
-      internalID: -2626192435373389952
+      spriteID: cbc2adaaab73728b0800000000000000
+      internalID: -5177107971769226052
       vertices: []
       indices: 
       edges: []

@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.name == "Exit") // Ensure only the player triggers it
         {
-            SceneManager.LoadScene("Map");
+            SceneManager.LoadScene("PlayScene");
         }
     }
 

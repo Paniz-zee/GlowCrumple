@@ -5,58 +5,58 @@ public class MusicManager : MonoBehaviour
 {
     public static MusicManager instance;
 
-   public AudioSource audioSource;
-    public AudioClip startSceneMusic;
-    public AudioClip gameSceneMusic; // This will also play in PlayScene
-
-    private string currentScene;
+    public AudioSource audioSource;
+    public AudioClip backgroundMusic;  // Single music for all scenes
 
     void Awake()
     {
+        // Ensure that the music manager is persistent across scenes
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);  // Prevent music manager from being destroyed on scene load
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject);  // Destroy duplicate instances of the music manager
             return;
         }
 
+        // Get the AudioSource component on the same GameObject
         audioSource = GetComponent<AudioSource>();
-        PlayStartSceneMusic();
 
+        // If music isn't already playing, start playing it
+        if (!audioSource.isPlaying)
+        {
+            PlayBackgroundMusic();
+        }
+
+        // Subscribe to scene loaded events to handle changes
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        currentScene = scene.name;
-
-        if (currentScene == "GameScene" || currentScene == "PlayScene")
+        // Make sure the background music continues to play without interruption
+        if (!audioSource.isPlaying)
         {
-            PlayGameSceneMusic();
+            PlayBackgroundMusic();
         }
     }
 
-    void PlayStartSceneMusic()
+    void PlayBackgroundMusic()
     {
-        if (audioSource.clip != startSceneMusic)
+        if (audioSource.clip != backgroundMusic)
         {
-            audioSource.clip = startSceneMusic;
-            audioSource.loop = true;
-            audioSource.Play();
+            audioSource.clip = backgroundMusic;  // Set the music clip
+            audioSource.loop = true;  // Loop the music
+            audioSource.Play();  // Start the music
         }
     }
 
-    void PlayGameSceneMusic()
+    // Optional: Stop the music when needed (for instance, at the end of the game)
+    public void StopMusic()
     {
-        if (audioSource.clip != gameSceneMusic)
-        {
-            audioSource.clip = gameSceneMusic;
-            audioSource.loop = true;
-            audioSource.Play();
-        }
+        audioSource.Stop();
     }
 }
