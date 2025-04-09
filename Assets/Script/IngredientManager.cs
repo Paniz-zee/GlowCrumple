@@ -7,6 +7,7 @@ public class IngredientManager : MonoBehaviour
 {
     public TMP_Text bowlText;
     public TMP_Text availabilityText;
+    public GameObject bakeButton;
 
     private string currentIngredients = "";
     private Dictionary<string, int> ingredientClickCount = new Dictionary<string, int>();
@@ -17,7 +18,12 @@ public class IngredientManager : MonoBehaviour
     public void AddIngredient(string ingredientName)
     {
         availabilityText.gameObject.SetActive(false);
-
+        if (!validIngredients.Contains(ingredientName))
+        {
+            bowlText.text = "Incorrect ingredient!";
+            bakeButton.SetActive(false); // Hide the bake button
+            return;
+        }
         // Check if the ingredient is valid
         if (!validIngredients.Contains(ingredientName))
         {

@@ -1,21 +1,25 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // Required for scene management
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BreadSpawnScript : MonoBehaviour
 {
-    public GameObject breadPrefab;   // The bread prefab to spawn
-    public Transform spawnPosition;  // Position where the bread will appear (above the bowl)
-    public Transform tablePosition;  // Position where the bread will be placed (on the table)
-    public float moveSpeed = 2f;     // Speed at which the bread moves
+    public GameObject breadPrefab;
+    public Transform spawnPosition;
+    public Transform tablePosition;
+    public float moveSpeed = 2f;
     public TMP_Text messageText;
-    public string winSceneName = "WinScene"; // Change this to your actual scene name
+    public string winSceneName = "WinScene";
+    public Button serveButton;
+    //public AudioClip audioClip;
 
-    private bool breadIsSpawned = false; // Prevent multiple spawns
+    private bool breadIsSpawned = false;
 
     void Start()
     {
+        serveButton.gameObject.SetActive(false);
         if (breadPrefab == null || spawnPosition == null || tablePosition == null)
         {
             Debug.LogError("Please assign all references in the Inspector.");
@@ -25,14 +29,14 @@ public class BreadSpawnScript : MonoBehaviour
 
     public void StartBaking()
     {
-        if (breadIsSpawned) return;  // Prevent multiple spawns
+        if (breadIsSpawned) return; 
 
         StartCoroutine(SpawnBreadAfterDelay(2f));
     }
 
     private IEnumerator SpawnBreadAfterDelay(float delay)
     {
-        yield return new WaitForSeconds(delay); // Wait for the specified delay
+        yield return new WaitForSeconds(delay);
 
         GameObject bread = Instantiate(breadPrefab, spawnPosition.position, Quaternion.identity);
         breadIsSpawned = true;
@@ -45,9 +49,16 @@ public class BreadSpawnScript : MonoBehaviour
 
         bread.transform.position = tablePosition.position;
         messageText.text = "Your bread is ready!";
+        serveButton.gameObject.SetActive(true);
+        //ServeOrder();
+        //yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(2f); // Wait 2 seconds before scene transition
-
-        SceneManager.LoadScene(winSceneName); // Load the Win Scene
+        //SceneManager.LoadScene(winSceneName);
+    }
+    public void ServeOrder()
+    {
+        
+        
+        SceneManager.LoadScene(winSceneName);
     }
 }
